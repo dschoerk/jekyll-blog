@@ -5,7 +5,7 @@ permalink: /about/
 ---
 
 
-Hi, I'm Dominik
+Hey! Glad you've found my website. Here I'm writing about my thoughts, interests and projects. 
 
 <div class="display: flex justify-center">
 <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-xs justify-center">
