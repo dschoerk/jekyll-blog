@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake RL</title>
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/ort.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #111827;
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    h1 { font-size: 1.8rem; color: #86efac; margin-bottom: 0.4rem; letter-spacing: 1px; }
+    #score-display { margin-bottom: 0.8rem; font-size: 1rem; color: #d1d5db; }
+    canvas { border: 2px solid #374151; display: block; }
+    #message {
+      margin-top: 0.8rem;
+      color: #9ca3af;
+      font-size: 0.85rem;
+      min-height: 1.4rem;
+      text-align: center;
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(3, 40px);
+      gap: 4px;
+      margin-top: 0.8rem;
+    }
+    .controls button {
+      padding: 8px;
+      background: #374151;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+    .controls button:hover { background: #4b5563; }
+    .controls button.center { background: #1d4ed8; }
+    .controls button.center:hover { background: #2563eb; }
+    .hidden { visibility: hidden; }
+    #hint { margin-top: 0.5rem; color: #4b5563; font-size: 0.7rem; }
+  </style>
+</head>
+<body>
+  <h1>Snake RL</h1>
+  <div id="score-display">Score: <span id="score">0</span></div>
+  <canvas id="canvas" width="400" height="400"></canvas>
+  <div id="message">Loading RL model&hellip;</div>
+
+  <div class="controls">
+    <button class="hidden">·</button>
+    <button onclick="handleKey('ArrowUp')">↑</button>
+    <button class="hidden">·</button>
+    <button onclick="handleKey('ArrowLeft')">←</button>
+    <button class="center" onclick="handleKey(' ')">▶</button>
+    <button onclick="handleKey('ArrowRight')">→</button>
+    <button class="hidden">·</button>
+    <button onclick="handleKey('ArrowDown')">↓</button>
+    <button class="hidden">·</button>
+  </div>
+  <div id="hint">The AI plays automatically &mdash; use arrows to override</div>
+
+  <script>
+    const GRID_SIZE = 20;
+    const CANVAS_SIZE = 400;
+    const GRID_W = CANVAS_SIZE / GRID_SIZE;
+    const GRID_H = CANVAS_SIZE / GRID_SIZE;
+    const MODEL_URL = '/assets/dqn_model.onnx';
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score');
+    const msgEl = document.getElementById('message');
+
+    let snake, food, direction, gameOver, gameStarted, score;
+    let ortSession = null;
+    let modelLoaded = false;
+    let gameInterval = null;
+
+    function initGame() {
+      snake = [{ x: 10, y: 10 }];
+      food = { x: 15, y: 15 };
+      direction = { x: 0, y: 1 };
+      gameOver = false;
+      score = 0;
+      scoreEl.textContent = '0';
+    }
+
+    function generateFood(currentSnake) {
+      const occupied = new Set(currentSnake.map(s => `${s.x},${s.y}`));
+      let x, y;
+      do {
+        x = Math.floor(Math.random() * GRID_W);
+        y = Math.floor(Math.random() * GRID_H);
+      } while (occupied.has(`${x},${y}`));
+      return { x, y };
+    }
+
+    function checkCollision(head, snakeArr) {
+      if (head.x < 0 || head.x >= GRID_W || head.y < 0 || head.y >= GRID_H) return true;
+      for (const seg of snakeArr) {
+        if (head.x === seg.x && head.y === seg.y) return true;
+      }
+      return false;
+    }
+
+    function draw() {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+      // Draw grid (subtle)
+      ctx.strokeStyle = '#0a0a0a';
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i <= GRID_W; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * GRID_SIZE, 0);
+        ctx.lineTo(i * GRID_SIZE, CANVAS_SIZE);
+        ctx.stroke();
+      }
+      for (let j = 0; j <= GRID_H; j++) {
+        ctx.beginPath();
+        ctx.moveTo(0, j * GRID_SIZE);
+        ctx.lineTo(CANVAS_SIZE, j * GRID_SIZE);
+        ctx.stroke();
+      }
+
+      // Draw food
+      ctx.fillStyle = '#ef4444';
+      const fx = food.x * GRID_SIZE + GRID_SIZE / 2;
+      const fy = food.y * GRID_SIZE + GRID_SIZE / 2;
+      ctx.beginPath();
+      ctx.arc(fx, fy, (GRID_SIZE - 2) / 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Draw snake
+      for (let i = 0; i < snake.length; i++) {
+        ctx.fillStyle = i === 0 ? '#86efac' : '#22c55e';
+        ctx.fillRect(snake[i].x * GRID_SIZE + 1, snake[i].y * GRID_SIZE + 1, GRID_SIZE - 2, GRID_SIZE - 2);
+      }
+
+      // Overlay screens
+      if (!gameStarted && !gameOver) {
+        ctx.fillStyle = 'rgba(0,0,0,0.65)';
+        ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#86efac';
+        ctx.font = 'bold 26px system-ui';
+        ctx.fillText('Snake RL', CANVAS_SIZE / 2, CANVAS_SIZE / 2 - 24);
+        ctx.fillStyle = '#d1d5db';
+        ctx.font = '15px system-ui';
+        ctx.fillText(modelLoaded ? 'Press SPACE or ▶ to start' : 'Loading model\u2026', CANVAS_SIZE / 2, CANVAS_SIZE / 2 + 10);
+      }
+
+      if (gameOver) {
+        ctx.fillStyle = 'rgba(0,0,0,0.65)';
+        ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#f87171';
+        ctx.font = 'bold 28px system-ui';
+        ctx.fillText('Game Over!', CANVAS_SIZE / 2, CANVAS_SIZE / 2 - 28);
+        ctx.fillStyle = '#d1d5db';
+        ctx.font = '16px system-ui';
+        ctx.fillText(`Score: ${score}`, CANVAS_SIZE / 2, CANVAS_SIZE / 2 + 4);
+        ctx.fillText('Press SPACE or ▶ to restart', CANVAS_SIZE / 2, CANVAS_SIZE / 2 + 28);
+      }
+    }
+
+    async function runModel() {
+      if (!ortSession) return null;
+      const head = snake[0];
+      const go_up    = food.y < head.y ? 1 : 0;
+      const go_down  = food.y > head.y ? 1 : 0;
+      const go_left  = food.x < head.x ? 1 : 0;
+      const go_right = food.x > head.x ? 1 : 0;
+
+      const bodySet = new Set(snake.map(s => `${s.x},${s.y}`));
+      function isDanger(pt) {
+        return pt.x < 0 || pt.y < 0 || pt.x >= GRID_W || pt.y >= GRID_H || bodySet.has(`${pt.x},${pt.y}`);
+      }
+      const d = direction;
+      const danger_straight = isDanger({ x: head.x + d.x, y: head.y + d.y }) ? 1 : 0;
+      const danger_left     = isDanger({ x: head.x - d.y, y: head.y + d.x }) ? 1 : 0;
+      const danger_right    = isDanger({ x: head.x + d.y, y: head.y - d.x }) ? 1 : 0;
+      const dir_right = d.x === 1 ? 1 : 0;
+      const dir_left  = d.x === -1 ? 1 : 0;
+      const dir_down  = d.y === 1 ? 1 : 0;
+      const dir_up    = d.y === -1 ? 1 : 0;
+
+      const localGrid = [];
+      for (let row = -3; row <= 3; row++) {
+        for (let col = -3; col <= 3; col++) {
+          const cx = head.x + col;
+          const cy = head.y + row;
+          if (cx < 0 || cy < 0 || cx >= GRID_W || cy >= GRID_H) {
+            localGrid.push(1.0);
+          } else if (cx === food.x && cy === food.y) {
+            localGrid.push(-1.0);
+          } else if (bodySet.has(`${cx},${cy}`)) {
+            localGrid.push(1.0);
+          } else {
+            localGrid.push(0.0);
+          }
+        }
+      }
+
+      const inputArr = [
+        go_up, go_down, go_left, go_right,
+        danger_straight, danger_left, danger_right,
+        dir_right, dir_left, dir_down, dir_up,
+        snake.length / (GRID_W * GRID_H),
+        ...localGrid
+      ];
+
+      const tensor = new ort.Tensor('float32', Float32Array.from(inputArr), [1, inputArr.length]);
+      const result = await ortSession.run({ observations: tensor });
+      const qValues = result['q_values'] ?? Object.values(result)[0];
+      const data = qValues.cpuData ?? Array.from(qValues.data);
+      let maxIdx = 0;
+      for (let i = 1; i < data.length; i++) {
+        if (data[i] > data[maxIdx]) maxIdx = i;
+      }
+      return maxIdx;
+    }
+
+    const dirMap = {
+      0: { x: 0, y: -1 },
+      1: { x: 1, y: 0 },
+      2: { x: 0, y: 1 },
+      3: { x: -1, y: 0 }
+    };
+
+    async function moveSnake() {
+      if (!gameStarted || gameOver) return;
+
+      let newDir = direction;
+      const pred = await runModel();
+      if (pred !== null) {
+        const candidate = dirMap[pred];
+        if (!(snake.length > 1 && candidate.x + direction.x === 0 && candidate.y + direction.y === 0)) {
+          newDir = candidate;
+        }
+      }
+
+      direction = newDir;
+      const head = { x: snake[0].x + newDir.x, y: snake[0].y + newDir.y };
+      const willEat = head.x === food.x && head.y === food.y;
+      const bodyForCollision = willEat ? [...snake] : snake.slice(0, -1);
+
+      if (checkCollision(head, bodyForCollision)) {
+        gameOver = true;
+        gameStarted = false;
+        if (gameInterval) { clearInterval(gameInterval); gameInterval = null; }
+        msgEl.textContent = 'Game Over! Press SPACE or ▶ to restart.';
+        draw();
+        return;
+      }
+
+      snake.unshift(head);
+      if (willEat) {
+        score += 10;
+        scoreEl.textContent = score;
+        food = generateFood(snake);
+      } else {
+        snake.pop();
+      }
+
+      draw();
+    }
+
+    function startGame() {
+      initGame();
+      gameStarted = true;
+      msgEl.textContent = modelLoaded ? 'AI is playing\u2026' : 'Playing without AI (model not loaded)';
+      if (gameInterval) clearInterval(gameInterval);
+      gameInterval = setInterval(moveSnake, 150);
+      draw();
+    }
+
+    async function handleKey(key) {
+      if (!gameStarted && key === ' ') {
+        startGame();
+        return;
+      }
+      if (gameOver && key === ' ') {
+        startGame();
+        return;
+      }
+      if (!gameStarted || gameOver) return;
+      switch (key) {
+        case 'ArrowUp':    if (direction.y === 0) direction = { x: 0, y: -1 }; break;
+        case 'ArrowDown':  if (direction.y === 0) direction = { x: 0, y: 1 };  break;
+        case 'ArrowLeft':  if (direction.x === 0) direction = { x: -1, y: 0 }; break;
+        case 'ArrowRight': if (direction.x === 0) direction = { x: 1, y: 0 };  break;
+      }
+    }
+
+    window.addEventListener('keydown', e => {
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) {
+        e.preventDefault();
+      }
+      handleKey(e.key);
+    });
+
+    // Init
+    initGame();
+    draw();
+
+    // Load model in background
+    (async () => {
+      try {
+        ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.22.0/dist/';
+        ortSession = await ort.InferenceSession.create(MODEL_URL);
+        modelLoaded = true;
+        startGame();
+      } catch (e) {
+        console.error('Failed to load ONNX model:', e);
+        modelLoaded = false;
+        msgEl.textContent = 'Could not load AI model. Press SPACE to play manually.';
+        draw();
+      }
+    })();
+  </script>
+</body>
+</html>
