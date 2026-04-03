@@ -1,4 +1,12 @@
-# Fighting WordPress Pingback Attacks
+---
+layout: post
+title: "Fighting WordPress Pingback Attacks"
+date: 2017-12-20
+categories: security
+---
+
+> This post was migrated from an old website of mine.
+>
 
 Published by  [dschoerk](https://web.archive.org/web/20201109040028/https://www.schoerkhuber.net/author/dschoerk/)  on  [December 20, 2017](https://web.archive.org/web/20201109040028/https://www.schoerkhuber.net/2017/12/)
 
