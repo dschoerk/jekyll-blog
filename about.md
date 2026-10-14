@@ -41,6 +41,18 @@ Hey! Glad you've found my website. Here I'm writing about my thoughts, interests
                 dominik@schoerkhuber.at
             </p>
         </div>
+
+        <!-- GPG Key Section -->
+        <div class="border-t pt-4 mt-4">
+            <p class="text-center text-sm text-gray-600">
+                <a href="https://keys.openpgp.org/vks/v1/by-fingerprint/698F15EE168707A8657F5EF517C81639CB174FFE" class="hover:text-blue-600">
+                    <i class="fas fa-key mr-2"></i>GPG Key
+                </a>
+            </p>
+            <p class="text-center text-xs text-gray-500 font-mono break-all mt-2">
+                698F 15EE 1687 07A8 657F<br />5EF5 17C8 1639 CB17 4FFE
+            </p>
+        </div>
     </div>
 </div>
 </div>
