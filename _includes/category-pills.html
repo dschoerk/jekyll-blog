@@ -1,0 +1,6 @@
+{%- for category in include.categories -%}
+  {%- assign label = site.category_pills[category] -%}
+  {%- if label -%}
+    <span class="category-pill category-pill--{{ category }}">{{ label }}</span>
+  {%- endif -%}
+{%- endfor -%}

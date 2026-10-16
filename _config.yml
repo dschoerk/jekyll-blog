@@ -34,6 +34,10 @@ theme: minima
 plugins:
   - jekyll-feed
 
+# Categories that get a pill next to the post date (category: label).
+category_pills:
+  weekend-projects: Weekend project
+
 
 # Exclude from processing.
 # The following items will not be processed, by default.

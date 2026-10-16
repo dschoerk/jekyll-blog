@@ -29,3 +29,21 @@
     text-decoration: none;
   }
 }
+
+.category-pill {
+  display: inline-block;
+  margin-left: 0.5em;
+  padding: 0.1em 0.6em;
+  border-radius: 999px;
+  font-size: 0.75em;
+  font-weight: 600;
+  line-height: 1.5;
+  vertical-align: middle;
+  background-color: #e8f0fe;
+  color: #1a56c4;
+}
+
+.category-pill--weekend-projects {
+  background-color: #fdf0dc;
+  color: #9a5b00;
+}
