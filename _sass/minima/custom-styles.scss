@@ -47,3 +47,32 @@
   background-color: #fdf0dc;
   color: #9a5b00;
 }
+
+// The Tailwind CDN (see _includes/custom-head.html) injects a preflight reset
+// after this stylesheet, which strips list markers and link colors. Restore
+// them for plain Markdown content; elements with Tailwind classes are untouched.
+.post-content {
+  ul:not([class]),
+  ol:not([class]) {
+    margin: 0 0 $spacing-unit * 0.5 $spacing-unit;
+    padding: 0;
+  }
+
+  ul:not([class]) { list-style: disc; }
+  ol:not([class]) { list-style: decimal; }
+
+  li:not([class]) { margin-bottom: 0.25em; }
+
+  a:not([class]) {
+    color: $link-base-color;
+    text-decoration: none;
+
+    &:visited { color: $link-visited-color; }
+
+    &:hover {
+      color: $link-hover-color;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+}
