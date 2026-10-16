@@ -1,0 +1,25 @@
+{%- comment -%}
+  Image gallery with a lightbox. Pass a list of {src, alt} entries, e.g. from front matter:
+    {% include gallery.html images=page.screenshots %}
+  Local paths go through relative_url; absolute URLs are used as-is.
+{%- endcomment -%}
+<div class="gallery">
+  <div class="gallery__strip">
+    {%- for image in include.images -%}
+      {%- if image.src contains '://' -%}{%- assign src = image.src -%}{%- else -%}{%- assign src = image.src | relative_url -%}{%- endif -%}
+      <button type="button" class="gallery__thumb" data-index="{{ forloop.index0 }}" aria-label="Enlarge: {{ image.alt | escape }}">
+        <img src="{{ src }}" alt="{{ image.alt | escape }}" loading="lazy">
+      </button>
+    {%- endfor -%}
+  </div>
+  <dialog class="gallery__lightbox" aria-label="Image viewer">
+    <figure class="gallery__figure">
+      <img class="gallery__full" alt="">
+      <figcaption class="gallery__caption"></figcaption>
+    </figure>
+    <button type="button" class="gallery__btn gallery__btn--close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <button type="button" class="gallery__btn gallery__btn--prev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
+    <button type="button" class="gallery__btn gallery__btn--next" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
+  </dialog>
+</div>
+<script src="{{ '/assets/js/gallery.js' | relative_url }}" defer></script>

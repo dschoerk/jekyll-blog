@@ -48,6 +48,103 @@
   color: #9a5b00;
 }
 
+// Image gallery, see _includes/gallery.html and assets/js/gallery.js.
+.gallery__strip {
+  display: flex;
+  gap: 0.75em;
+  margin-bottom: $spacing-unit * 0.5;
+  padding-bottom: 0.5em;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+}
+
+.gallery__thumb {
+  flex: 0 0 auto;
+  padding: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: none;
+  cursor: zoom-in;
+  scroll-snap-align: start;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+
+  img {
+    display: block;
+    width: auto;
+    max-width: none;
+    height: min(360px, 60vh);
+  }
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
+}
+
+.gallery__lightbox {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+
+  &::backdrop { background: rgba(0, 0, 0, 0.88); }
+}
+
+.gallery__figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75em;
+  height: 100%;
+  margin: 0;
+  padding: 1em 4em;
+}
+
+.gallery__full {
+  max-width: 100%;
+  max-height: calc(100vh - 6em);
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.gallery__caption {
+  color: #e8e8e8;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+.gallery__btn {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75em;
+  height: 2.75em;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+
+  &:hover { background: rgba(255, 255, 255, 0.3); }
+
+  &--close { top: 1em; right: 1em; }
+  &--prev { top: 50%; left: 0.75em; transform: translateY(-50%); }
+  &--next { top: 50%; right: 0.75em; transform: translateY(-50%); }
+}
+
+@media (max-width: 600px) {
+  .gallery__figure { padding: 1em; }
+  .gallery__btn--prev,
+  .gallery__btn--next { top: auto; bottom: 1em; transform: none; }
+}
+
 // The Tailwind CDN (see _includes/custom-head.html) injects a preflight reset
 // after this stylesheet, which strips list markers and link colors. Restore
 // them for plain Markdown content; elements with Tailwind classes are untouched.
