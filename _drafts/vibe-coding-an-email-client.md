@@ -10,3 +10,7 @@ After fighting with [Thunderbird](https://www.thunderbird.net/) that same day, m
 
 Claude started building the first prototype, and together we worked out a strategy for testing the application. Slint turned out to have an extremely useful feature for agentic UI development: it ships with an [MCP server](https://github.com/slint-ui/slint/blob/master/docs/development/mcp-server.md) to automate and control the UI layer. We paired this with a local email server (Greenlight) running in Docker to write automated tests that send emails between two accounts. Later I added test accounts with the providers Gmail, Hotmail and GMX, because each of them interprets the IMAP protocol a little differently. Yuck.
 
+Since Slint also runs on Android, why not build an Android email client at the same time? So here it is: the current state of my email client, with the creative name [mailclient](https://github.com/dschoerk/mailclient). My favorite feature so far is the "Find similar" button that shows up after archiving or deleting an email with a swipe. It lets you quickly get rid of lots of emails from the same sender. Below are some screenshots of the UI.
+
+![Conversation view of the Android app](https://github.com/dschoerk/mailclient/blob/main/docs/screenshots/android-conversation.png?raw=true)
+
