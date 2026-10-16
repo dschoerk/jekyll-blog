@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Weekend project: A posture coach with SAM 3D Body"
-date:   2026-10-16 12:00:00 +0000
+date:   2026-10-16 09:00:00 +0000
 categories: weekend-projects machine-learning
 ---
 
