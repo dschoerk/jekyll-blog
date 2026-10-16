@@ -1,7 +1,31 @@
 ---
 layout: post
 title: "Vibe coding an email client"
+date: 2026-10-15
 categories: weekend-projects
+screenshots:
+  - src: /assets/images/mailclient/desktop-inbox.png
+    alt: "Desktop: inbox"
+  - src: /assets/images/mailclient/desktop-conversation.png
+    alt: "Desktop: threaded conversation"
+  - src: /assets/images/mailclient/desktop-html.png
+    alt: "Desktop: HTML newsletter with remote images blocked"
+  - src: /assets/images/mailclient/desktop-invitation.png
+    alt: "Desktop: calendar invitation"
+  - src: /assets/images/mailclient/desktop-calendar.png
+    alt: "Desktop: calendar week view"
+  - src: /assets/images/mailclient/desktop-compose.png
+    alt: "Desktop: composing a message"
+  - src: /assets/images/mailclient/android-inbox.png
+    alt: "Android: inbox"
+  - src: /assets/images/mailclient/android-conversation.png
+    alt: "Android: threaded conversation"
+  - src: /assets/images/mailclient/android-html.png
+    alt: "Android: HTML email"
+  - src: /assets/images/mailclient/android-invitation.png
+    alt: "Android: calendar invitation"
+  - src: /assets/images/mailclient/android-compose.png
+    alt: "Android: composing a message"
 ---
 
 Last weekend I was looking for something to build after taking a few courses at the [Claude Academy](https://anthropic.skilljar.com/). For quite a while I have been intrigued by the possibility of building modern, efficient desktop applications again, after seeing more and more UI development move to the web over the last decade. [Electron](https://www.electronjs.org/) apps are a good example: they are basically a web browser disguised as a desktop application, so that apps can be built with web technologies. This lowers the barrier to entry, but comes at the cost of performance.
@@ -12,5 +36,5 @@ Claude started building the first prototype, and together we worked out a strate
 
 Since Slint also runs on Android, why not build an Android email client at the same time? So here it is: the current state of my email client, with the creative name [mailclient](https://github.com/dschoerk/mailclient). My favorite feature so far is the "Find similar" button that shows up after archiving or deleting an email with a swipe. It lets you quickly get rid of lots of emails from the same sender. Below are some screenshots of the UI.
 
-![Conversation view of the Android app](https://github.com/dschoerk/mailclient/blob/main/docs/screenshots/android-conversation.png?raw=true)
+{% include gallery.html images=page.screenshots %}
 
