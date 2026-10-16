@@ -42,6 +42,15 @@ Hey! Glad you've found my website. Here I'm writing about my thoughts, interests
             </p>
         </div>
 
+        <!-- CV Section -->
+        <div class="border-t pt-4 mt-4">
+            <p class="text-center text-sm text-gray-600">
+                <a href="{{ '/assets/cv-dominik-schoerkhuber.pdf' | relative_url }}" class="hover:text-blue-600">
+                    <i class="fas fa-file-pdf mr-2"></i>Curriculum Vitae (PDF)
+                </a>
+            </p>
+        </div>
+
         <!-- GPG Key Section -->
         <div class="border-t pt-4 mt-4">
             <p class="text-center text-sm text-gray-600">
