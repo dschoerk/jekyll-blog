@@ -49,37 +49,88 @@
 }
 
 // Image gallery, see _includes/gallery.html and assets/js/gallery.js.
-.gallery__strip {
-  display: flex;
-  gap: 0.75em;
+.gallery {
   margin-bottom: $spacing-unit * 0.5;
-  padding-bottom: 0.5em;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
+
+  &:focus-visible {
+    outline: 2px solid $link-base-color;
+    outline-offset: 4px;
+    border-radius: 8px;
+  }
 }
 
-.gallery__thumb {
-  flex: 0 0 auto;
+// Items are stacked at the horizontal centre; gallery.js positions and scales them.
+.gallery__stage {
+  position: relative;
+  // The vw cap keeps near-square desktop screenshots from being shrunk to fit on phones,
+  // which would leave empty space below them.
+  height: min(460px, 65vh, 88vw);
+  overflow: hidden;
+}
+
+.gallery__item {
+  position: absolute;
+  top: 1em;
+  bottom: 1em;
+  left: 50%;
   padding: 0;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #d0d0d0;
   border-radius: 8px;
   overflow: hidden;
-  background: none;
-  cursor: zoom-in;
-  scroll-snap-align: start;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transform: translateX(-50%);
+  transform-origin: center;
+
+  .gallery.is-ready & {
+    transition: transform 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
+  }
 
   img {
     display: block;
     width: auto;
     max-width: none;
-    height: min(360px, 60vh);
+    height: 100%;
   }
 
-  &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transform: translateY(-1px);
+  &:not(.is-current) { filter: brightness(0.85); }
+  &:not(.is-current):hover { filter: none; }
+  &.is-current { cursor: zoom-in; }
+
+  &.is-hidden {
+    opacity: 0;
+    pointer-events: none;
   }
+}
+
+.gallery__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5em;
+  height: 2.5em;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  cursor: pointer;
+  transform: translateY(-50%);
+
+  &:hover { background: rgba(0, 0, 0, 0.75); }
+
+  &--prev { left: 0.25em; }
+  &--next { right: 0.25em; }
+}
+
+.gallery__label {
+  margin: 0.25em 0 0;
+  color: #6b6b6b;
+  font-size: 0.9em;
+  text-align: center;
 }
 
 .gallery__lightbox {

@@ -1,17 +1,21 @@
 {%- comment -%}
-  Image gallery with a lightbox. Pass a list of {src, alt} entries, e.g. from front matter:
+  Carousel gallery with a lightbox: the selected image is shown large, its neighbours
+  progressively smaller. Pass a list of {src, alt} entries, e.g. from front matter:
     {% include gallery.html images=page.screenshots %}
   Local paths go through relative_url; absolute URLs are used as-is.
 {%- endcomment -%}
-<div class="gallery">
-  <div class="gallery__strip">
+<div class="gallery" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Image gallery">
+  <div class="gallery__stage">
     {%- for image in include.images -%}
       {%- if image.src contains '://' -%}{%- assign src = image.src -%}{%- else -%}{%- assign src = image.src | relative_url -%}{%- endif -%}
-      <button type="button" class="gallery__thumb" data-index="{{ forloop.index0 }}" aria-label="Enlarge: {{ image.alt | escape }}">
-        <img src="{{ src }}" alt="{{ image.alt | escape }}" loading="lazy">
+      <button type="button" class="gallery__item" data-index="{{ forloop.index0 }}" aria-label="{{ image.alt | escape }}">
+        <img src="{{ src }}" alt="{{ image.alt | escape }}">
       </button>
     {%- endfor -%}
+    <button type="button" class="gallery__nav gallery__nav--prev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
+    <button type="button" class="gallery__nav gallery__nav--next" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
   </div>
+  <p class="gallery__label" aria-live="polite"></p>
   <dialog class="gallery__lightbox" aria-label="Image viewer">
     <figure class="gallery__figure">
       <img class="gallery__full" alt="">
