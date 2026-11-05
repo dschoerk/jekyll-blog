@@ -224,3 +224,82 @@
     }
   }
 }
+
+// Keyboard keys, e.g. <kbd>Super</kbd> + <kbd>T</kbd>.
+.post-content kbd {
+  display: inline-block;
+  min-width: 1.7em;
+  margin: 0 0.1em;
+  padding: 0.15em 0.45em 0.1em;
+  border: 1px solid #c9ced6;
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  background: linear-gradient(#ffffff, #f2f4f7);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  color: #1f2937;
+  font-family: inherit;
+  font-size: 0.8em;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: 0.1em;
+
+  // Modifier keys get soft pastel tints.
+  &.mod-super { border-color: #b9e2dd; background: linear-gradient(#f1fbf9, #e2f4f1); color: #3f7c76; }
+  &.mod-shift { border-color: #cdd6f2; background: linear-gradient(#f5f7fd, #e7ecf9); color: #4f5f94; }
+  &.mod-ctrl  { border-color: #efd9bd; background: linear-gradient(#fefaf4, #f9eddc); color: #86613a; }
+}
+
+// Keeps a run of keys such as ←↓↑→ or HJKL on one line.
+.post-content .key-group { white-space: nowrap; }
+
+// Shortcut table: add {: .shortcuts} below a markdown table. Rows whose first cell is only
+// bold text (| **Group** | |) are rendered as section headings.
+.post-content table.shortcuts {
+  border: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95em;
+
+  th {
+    padding: 0 0 0.5em;
+    border: 0;
+    border-bottom: 2px solid #e5e7eb;
+    background: none;
+    color: #6b7280;
+    font-size: 0.75em;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  tr,
+  tr:nth-child(even) { background: none; }
+
+  td {
+    padding: 0.55em 0.75em 0.55em 0;
+    border: 0;
+    border-bottom: 1px solid #eef0f3;
+    vertical-align: middle;
+  }
+
+  td:first-child { width: 48%; }
+
+  tbody tr:not(:has(> td:first-child > strong:only-child)):hover td { background: #f8fafc; }
+
+  tr:has(> td:first-child > strong:only-child) td {
+    padding-top: 1.6em;
+    padding-bottom: 0.35em;
+    border-bottom: 2px solid #5cc4bc;
+
+    strong {
+      color: #2a8f88;
+      font-size: 0.8em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  }
+
+  tbody tr:first-child td { padding-top: 0.9em; }
+}

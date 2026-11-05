@@ -26,26 +26,27 @@ The keyboard shortcuts I need to remember for now:
 | Keys | Action |
 |---|---|
 | **Windows** | |
-| `SUPER + arrow keys` (or `H J K L`) | Move focus to the neighbouring window |
-| `SUPER + SHIFT + arrow keys` (or `H J K L`) | Move the focused window |
-| `SUPER + C` | Close the focused window |
-| `SUPER + V` | Toggle floating |
+| <kbd class="mod-super">Super</kbd> + <span class="key-group"><kbd>←</kbd><kbd>↓</kbd><kbd>↑</kbd><kbd>→</kbd></span> or <span class="key-group"><kbd>H</kbd><kbd>J</kbd><kbd>K</kbd><kbd>L</kbd></span> | Move focus to the neighbouring window |
+| <kbd class="mod-super">Super</kbd> + <kbd class="mod-shift">Shift</kbd> + <span class="key-group"><kbd>←</kbd><kbd>↓</kbd><kbd>↑</kbd><kbd>→</kbd></span> or <span class="key-group"><kbd>H</kbd><kbd>J</kbd><kbd>K</kbd><kbd>L</kbd></span> | Move the focused window |
+| <kbd class="mod-super">Super</kbd> + <kbd>C</kbd> | Close the focused window |
+| <kbd class="mod-super">Super</kbd> + <kbd>V</kbd> | Toggle floating |
 | **Workspaces** | |
-| `SUPER + 1–0` | Go to workspace 1–10 (press again to cycle through its windows) |
-| `SUPER + SHIFT + 1–0` | Move the focused window to workspace 1–10 |
-| `SUPER + CTRL + left/right` | Previous / next workspace |
-| `SUPER + S` | Show or hide the special workspace, my unseen workspace for parked windows |
-| `SUPER + SHIFT + S` | Move the focused window to the special workspace |
+| <kbd class="mod-super">Super</kbd> + <span class="key-group"><kbd>1</kbd>–<kbd>0</kbd></span> | Go to workspace 1–10 (press again to cycle through its windows) |
+| <kbd class="mod-super">Super</kbd> + <kbd class="mod-shift">Shift</kbd> + <span class="key-group"><kbd>1</kbd>–<kbd>0</kbd></span> | Move the focused window to workspace 1–10 |
+| <kbd class="mod-super">Super</kbd> + <kbd class="mod-ctrl">Ctrl</kbd> + <span class="key-group"><kbd>←</kbd> / <kbd>→</kbd></span> | Previous / next workspace |
+| <kbd class="mod-super">Super</kbd> + <kbd>S</kbd> | Show or hide the special workspace, my unseen workspace for parked windows |
+| <kbd class="mod-super">Super</kbd> + <kbd class="mod-shift">Shift</kbd> + <kbd>S</kbd> | Move the focused window to the special workspace |
 | **Layouts** | |
-| `SUPER + T` | Toggle the split direction |
-| `SUPER + SHIFT + T` | Cycle layouts: dwindle → master → scrolling |
+| <kbd class="mod-super">Super</kbd> + <kbd>T</kbd> | Toggle the split direction |
+| <kbd class="mod-super">Super</kbd> + <kbd class="mod-shift">Shift</kbd> + <kbd>T</kbd> | Cycle layouts: dwindle → master → scrolling |
 | **Apps** | |
-| `SUPER + R` | Open the launcher |
-| `SUPER + Q` | Terminal (kitty) |
-| `SUPER + E` | File manager (Dolphin) |
-| `SUPER + F1–F4` | Jump to Firefox, VS Code, kitty or Thunderbird, or launch it if it isn't running |
-| `SUPER + SHIFT + F1–F4` | Assign the focused app to that slot |
-| `SUPER + ß` | Cheat sheet with all bindings (the `?` key on a German keyboard) |
+| <kbd class="mod-super">Super</kbd> + <kbd>R</kbd> | Open the launcher |
+| <kbd class="mod-super">Super</kbd> + <kbd>Q</kbd> | Terminal (kitty) |
+| <kbd class="mod-super">Super</kbd> + <kbd>E</kbd> | File manager (Dolphin) |
+| <kbd class="mod-super">Super</kbd> + <span class="key-group"><kbd>F1</kbd>–<kbd>F4</kbd></span> | Jump to Firefox, VS Code, kitty or Thunderbird, or launch it if it isn't running |
+| <kbd class="mod-super">Super</kbd> + <kbd class="mod-shift">Shift</kbd> + <span class="key-group"><kbd>F1</kbd>–<kbd>F4</kbd></span> | Assign the focused app to that slot |
+| <kbd class="mod-super">Super</kbd> + <kbd>ß</kbd> | Cheat sheet with all bindings (the <kbd>?</kbd> key on a German keyboard) |
+{: .shortcuts}
 
 The full list and the config itself are on GitHub: [dschoerk/Hyprland-Desktop](https://github.com/dschoerk/Hyprland-Desktop).
 
