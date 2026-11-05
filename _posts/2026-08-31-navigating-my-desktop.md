@@ -21,10 +21,32 @@ I went through several Linux distros by now that I've installed sometimes on my 
 
 Currently I'm tipping my toes into using Hyprland and it helped me significantly to avoid touching my mouse. I've configured it with all kinds of keyboard shortcuts (with the help of tutorials and Claude Code). Why I was immediately sold to Hyprland after using Krohnkite was that there is a very clear highlighting of the active window. (super + cursor keys) lets me navigate my focus to other windows relative to the current one. There is also no concept of the window state minimized like in a conventional desktop, but we can move windows to an unseen workspace. Technically, we can maximize a window to fullscreen, but until now I never felt the need to regularly switch between maximized and windowed states. 
 
-The keyboard shortcuts I need to remember for now: 
-super + cursor keys: Navigate relative to current focus
-super + shift + Cursor keys: moves the currently focused window
-super + number: Select workspace
-super + r: Opening the launcher
+The keyboard shortcuts I need to remember for now:
+
+| Keys | Action |
+|---|---|
+| **Windows** | |
+| `SUPER + arrow keys` (or `H J K L`) | Move focus to the neighbouring window |
+| `SUPER + SHIFT + arrow keys` (or `H J K L`) | Move the focused window |
+| `SUPER + C` | Close the focused window |
+| `SUPER + V` | Toggle floating |
+| **Workspaces** | |
+| `SUPER + 1–0` | Go to workspace 1–10 (press again to cycle through its windows) |
+| `SUPER + SHIFT + 1–0` | Move the focused window to workspace 1–10 |
+| `SUPER + CTRL + left/right` | Previous / next workspace |
+| `SUPER + S` | Show or hide the special workspace, my unseen workspace for parked windows |
+| `SUPER + SHIFT + S` | Move the focused window to the special workspace |
+| **Layouts** | |
+| `SUPER + T` | Toggle the split direction |
+| `SUPER + SHIFT + T` | Cycle layouts: dwindle → master → scrolling |
+| **Apps** | |
+| `SUPER + R` | Open the launcher |
+| `SUPER + Q` | Terminal (kitty) |
+| `SUPER + E` | File manager (Dolphin) |
+| `SUPER + F1–F4` | Jump to Firefox, VS Code, kitty or Thunderbird, or launch it if it isn't running |
+| `SUPER + SHIFT + F1–F4` | Assign the focused app to that slot |
+| `SUPER + ß` | Cheat sheet with all bindings (the `?` key on a German keyboard) |
+
+The full list and the config itself are on GitHub: [dschoerk/Hyprland-Desktop](https://github.com/dschoerk/Hyprland-Desktop).
 
 This style of navigating around the desktop feels very natural. I wonder if my favorite editor VS Code will be next... 
