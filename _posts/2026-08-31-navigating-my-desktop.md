@@ -9,7 +9,7 @@ categories: jekyll update
 
 Due to my job and interests I mostly sit at a Computer all day long, hence why I try do so as efficiently as possible. What helps me with that are configurable desktop environments (and less Windows bloat). 
 
-(image) Windows icon ==> Ubuntu Unity ===> Ubuntu KDE ==> CachyOS Hyprland
+![My desktop journey: Windows with its taskbar, Ubuntu Unity with its launcher, KDE Plasma with its panel, and Hyprland with tiled windows]({{ '/assets/images/desktop/desktop-evolution.webp' | relative_url }})
 
 Several (like 3) yrs ago I completely made the switch from Windows to Linux at my home computer, where I mostly tinker with Software, experiment with Machine Learning or simply play some games. While I dual booted Linux and Windows for about 10 yrs already, I haven't touched Windows for now in a very long time. This almost sounds like breaking an addiction or ending an abusive relationship. Expensive licenses, forcing the use of online accounts, force the Edge browser on users, force Onedrive on users, broken and duplicated System control settings and a couple more things have made the decision easy for me. Besides these negatives I also want to highlight that Microsoft has developed my favorite Code Editor VS Code, integrated a native OpenSSH client/server into Windows and continuously improved WSL. However, why use WSL when we can use Linux directly. Admittedly, my Laptop still has a dual boot Linux+Windows because I use it for conference presentations. Old habits die hard and unfortunately that thing always has been reliable. 
 
