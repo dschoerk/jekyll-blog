@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Short-form videos as code with Remotion"
+date:   2026-11-12 09:00:00 +0000
 categories: weekend-projects
 ---
 
