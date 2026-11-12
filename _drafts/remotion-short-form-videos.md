@@ -43,8 +43,10 @@ Rendering is one npm script per output: `remotion render` for the MP4 and `remot
 
 <!-- TODO: screenshot of the cover and two or three carousel slides side by side -->
 
-### Step 1: cut the footage with ffmpeg
-The raw clip is about two minutes of 1080×1920 HEVC/HDR from my phone, and far too long for a reel. Remotion could seek around in it, but it's simpler to do the rough cut up front. `scripts/cut.sh` uses ffmpeg to cut four segments and speed them up differently:
+### Step 1: record, convert and cut the footage
+It started last winter, when we went to the Donau to record a few minutes of video while ice bathing. The result is a single clip of about two minutes, 1080×1920 HEVC/HDR straight from my phone, and far too long for a reel.
+
+Before Remotion gets to see it, the raw footage is converted and cut with ffmpeg. Remotion could seek around in the original, but it's simpler to do the rough cut up front. `scripts/cut.sh` cuts four segments and speeds them up differently:
 
 | Segment     | Source        | Speed |
 |-------------|---------------|-------|
@@ -53,7 +55,7 @@ The raw clip is about two minutes of 1080×1920 HEVC/HDR from my phone, and far 
 | In the water| 51.5–95.3 s   | 6×    |
 | Exit        | 119–122.5 s   | 1×    |
 
-The segments are re-encoded to H.264 at 30 fps (`setpts=PTS/8` does the speed-up) and concatenated into a single 18.5-second `full.mp4`. The timestamps are stored as markers in `assets.json`. I set them by scrubbing through a small proxy copy of the video.
+The segments are converted from HEVC to 8-bit H.264 at 30 fps (`setpts=PTS/8` does the speed-up) and concatenated into a single 18.5-second `full.mp4`. The timestamps are stored as markers in `assets.json`. I set them by scrubbing through a small proxy copy of the video.
 
 The original footage isn't in git. It's 312 MB, so it's archived in Google Drive, and `assets.json` links to it. The generated `full.mp4` is in `.gitignore`. Anyone with access to the original can rebuild the cut with `bash scripts/cut.sh /path/to/original.mp4`.
 
