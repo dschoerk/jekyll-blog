@@ -160,11 +160,18 @@ Most of the "AI" features in editing apps are classic computer vision tasks with
 
 <!-- TODO: any terms you'd add from your own background, or one you'd like to try next in this pipeline (e.g. segmentation with SAM for a cutout effect) -->
 
+### Claude as script writer and Remotion developer
+Describing a video in code only pays off if writing that code is fast, and this is where Claude comes in. It's very capable at both halves of the job. It drafts the script: the hook, the captions, the tips and the call to action, all the strings that end up in `TEXT` in `config.js`. And it writes the Remotion code itself: compositions, `interpolate` calls with easing, the virtual camera, the font loading. Since the whole video is a few React files and a config, I can describe a change in plain words ("push in slower during the entry", "move the timer to the top left") and get a diff I can preview in Remotion Studio right away.
+
+<!-- TODO: an example prompt or iteration that worked well, or where you had to step in -->
+
+With Claude Code on the desktop there's a second advantage: it runs on my own machine. So it can use local compute, including the GPU, to run computer vision models on the footage, not just write code for them. Everything from the vocabulary table above becomes something Claude can actually execute: a person tracker for an auto-reframe, pose estimation like in the [posture coach]({% post_url 2026-10-16-sam3dbody-posture-coach %}), or segmentation for a cutout effect. The results, such as bounding boxes or keypoints per frame, can be written to JSON and read by the Remotion composition like any other config. The raw footage never has to leave my machine.
+
+<!-- TODO: if you've already tried running a CV model this way on the reel footage, what you ran and how it went -->
+
 ### What's not automated (yet)
 - **Music.** The footage is silent, and I add music in the Instagram app when uploading, so I can pick from its library.
 - **The edit decisions.** The markers and camera moves are still chosen by hand. Code makes them easy to change and reproduce, but somebody still has to watch the footage.
 
 <!-- TODO: your takeaways. How long did this take compared to editing in an app? Would you do the next video the same way? How did the reel perform? -->
-<!-- TODO: if you used Claude Code / AI assistance to write the Remotion code, a paragraph on that workflow -->
-
 The project is on [GitHub](https://github.com/dschoerk/social-media-content). New videos get their own folder next to `icebath-reel`.
