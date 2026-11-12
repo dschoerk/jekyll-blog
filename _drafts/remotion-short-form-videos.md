@@ -6,9 +6,9 @@ categories: weekend-projects
 
 ## Editing a reel without a timeline
 
-<!-- TODO: your motivation in a few sentences. Why short-form videos at all, and why not just use CapCut / the Instagram editor? -->
+<!-- TODO: your motivation in a few sentences. Why short-form videos at all? -->
 
-A reel is mostly a timeline: a few clips, some speed changes, a slow zoom here and there, and text that fades in and out at the right moment. Video editors make you build that by dragging things around with the mouse. I wanted to describe it in code instead, so that a cut is reproducible, the texts live in one file, and changing "fade in a bit later" is a one-line diff.
+CapCut is the obvious tool for this, and it's capable, but it's also expensive once you want the features that matter. And a reel is mostly a timeline: a few clips, some speed changes, a slow zoom here and there, and text that fades in and out at the right moment. Video editors make you build that by dragging things around with the mouse. I wanted to describe it in code instead, so that a cut is reproducible, the texts live in one file, and changing "fade in a bit later" is a one-line diff.
 
 [Remotion](https://www.remotion.dev/) does exactly that. A video is a React component. Remotion tells the component which frame it's on, the component returns what that frame should look like, and a headless Chrome screenshots every frame and hands them to ffmpeg. Everything you know from the web works: CSS, fonts, gradients, SVG, images. Time is just a number you can do math with.
 
@@ -128,6 +128,29 @@ Promise.all([
   new FontFace('Inter', `url(${staticFile('fonts/inter-600.woff2')})`, {weight: '600'}).load(),
 ]).then(fs => { fs.forEach(f => document.fonts.add(f)); continueRender(handle); });
 ```
+
+### Three vocabularies for the same thing
+Working on this, I kept noticing that content creators, video producers and computer vision engineers talk about the same operations with completely different words. A creator taps "remove background" in an app. A video editor calls it rotoscoping and used to do it by hand, frame by frame. A computer vision engineer calls it video object segmentation, or matting if the edges should be soft, like hair. It's the same pixels in the end.
+
+| Content creator            | Video producer               | Computer vision engineer                       |
+|----------------------------|------------------------------|------------------------------------------------|
+| Remove background, cutout  | Rotoscoping, masking         | Image / video segmentation, matting            |
+| Green screen               | Chroma key                   | Color-based segmentation (thresholding)        |
+| Zoom effect, punch-in      | Reframing, Ken Burns, pan & scan | Crop and affine transform                  |
+| Smooth zoom                | Keyframes with ease in/out   | Interpolation with easing curves               |
+| Speed up, time-lapse       | Speed ramp, retiming         | Temporal resampling                            |
+| Smooth slow-mo             | Optical flow retiming        | Frame interpolation                            |
+| Sticker that follows you   | Motion tracking              | Object tracking                                |
+| Fix shaky video            | Stabilization                | Camera motion estimation and warping           |
+| Enhance, HD                | Upscaling                    | Super-resolution                               |
+| Filter                     | Color grading, LUT           | Color space transform, lookup table            |
+| Auto captions              | Subtitles, transcription     | Speech recognition with word-level alignment   |
+| Cut the silences           | Jump cuts                    | Voice activity detection                       |
+| Pick a cover               | Thumbnail, poster frame      | Keyframe selection                             |
+
+The virtual camera from step 3 is a good example. On Instagram it's a "zoom effect", in an editor it's a keyframed reframe, and in the code it's a scale and a translation in a CSS transform. The soft close-ups are what an engineer would call upsampling artifacts, and the fix would be super-resolution. Most of the "AI" features in editing apps are classic computer vision tasks with a friendlier name, and once you know the engineering term, you usually find an open model or library for it.
+
+<!-- TODO: any terms you'd add from your own background, or one you'd like to try next in this pipeline (e.g. segmentation with SAM for a cutout effect) -->
 
 ### What's not automated (yet)
 - **Music.** The footage is silent, and I add music in the Instagram app when uploading, so I can pick from its library.
