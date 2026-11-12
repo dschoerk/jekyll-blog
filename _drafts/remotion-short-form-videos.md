@@ -142,7 +142,9 @@ Working on this, I kept noticing that content creators, video producers and comp
 | Smooth zoom                | Keyframes with ease in/out   | Interpolation with easing curves               |
 | Speed up, time-lapse       | Speed ramp, retiming         | Temporal resampling                            |
 | Smooth slow-mo             | Optical flow retiming        | Frame interpolation                            |
-| Sticker that follows you   | Motion tracking              | Object tracking                                |
+| Sticker that follows you   | Motion tracking              | Object tracking (detection + association over frames) |
+| Auto-reframe, follow mode  | Subject tracking, tracked reframe | Object tracking driving a crop window     |
+| Body effects, AR filters   | Motion capture (mocap)       | Human pose estimation (2D / 3D keypoints)      |
 | Fix shaky video            | Stabilization                | Camera motion estimation and warping           |
 | Enhance, HD                | Upscaling                    | Super-resolution                               |
 | Filter                     | Color grading, LUT           | Color space transform, lookup table            |
@@ -150,7 +152,11 @@ Working on this, I kept noticing that content creators, video producers and comp
 | Cut the silences           | Jump cuts                    | Voice activity detection                       |
 | Pick a cover               | Thumbnail, poster frame      | Keyframe selection                             |
 
-The virtual camera from step 3 is a good example. On Instagram it's a "zoom effect", in an editor it's a keyframed reframe, and in the code it's a scale and a translation in a CSS transform. The soft close-ups are what an engineer would call upsampling artifacts, and the fix would be super-resolution. Most of the "AI" features in editing apps are classic computer vision tasks with a friendlier name, and once you know the engineering term, you usually find an open model or library for it.
+The virtual camera from step 3 is a good example. On Instagram it's a "zoom effect", in an editor it's a keyframed reframe, and in the code it's a scale and a translation in a CSS transform. The soft close-ups are what an engineer would call upsampling artifacts, and the fix would be super-resolution.
+
+Object tracking and human pose estimation are the two I find most interesting for this pipeline. Right now the camera moves are hand-picked pixel coordinates in `config.js`. An app calls the automatic version "auto-reframe", a video editor would call it a tracked reframe, and for an engineer it's a person tracker whose bounding box drives `cx` and `cy`, smoothed so the virtual camera doesn't jitter. Pose estimation goes a step further: instead of a box, you get the body's keypoints. That's what a producer would call motion capture, without the suit and markers. I've played with that before in my [posture coach with SAM 3D Body]({% post_url 2026-10-16-sam3dbody-posture-coach %}), where a monocular model estimates the 3D skeleton from a single webcam frame.
+
+Most of the "AI" features in editing apps are classic computer vision tasks with a friendlier name, and once you know the engineering term, you usually find an open model or library for it.
 
 <!-- TODO: any terms you'd add from your own background, or one you'd like to try next in this pipeline (e.g. segmentation with SAM for a cutout effect) -->
 
